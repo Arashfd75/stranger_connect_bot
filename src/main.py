@@ -41,15 +41,32 @@ class Bot:
     def respond_text(self, message):
         self.set(message)
         message.text = emoji.demojize(message.text)
+        if message.text == KEYS.start:
+            self.send_welcome(message)
+        if not self.get_state():
+            self.send_message(
+            ':cross_mark: You must first use the start command',
+            reply_markup=keyboards.start
+            )
+            return None        
         if message.text == KEYS.disconnect:
             # self.send_message(predefined_texts.disconncet, reply_markup=keyboards.main)
             # self.set_state(states.init)
             self.disconnect()
+
+
         elif  self.get_state() == states.talking:
             self.send_message(message.text, chat_id=self.users[self.chat_id]['random_connect'])
         #trying to connect
         elif message.text == KEYS.random_connect:
             # connect it to a random stranger
+            if not self.get_state():
+                self.send_message(
+                ':cross_mark: You must first use the start command',
+                reply_markup=keyboards.start
+                )
+                return None
+
             self.send_message(
                 ':hourglass_not_done: Waiting for someone to connect...',
                 reply_markup=keyboards.back
@@ -59,9 +76,6 @@ class Bot:
             self.send_message(predefined_texts.init, reply_markup=keyboards.main)
             self.users[self.chat_id]['state'] = states.init
 
-
-
-        # self.send_message(f"hiii {self.name}")
 
         if self.get_state() == states.random_connect:
             self.connect()
@@ -85,7 +99,10 @@ class Bot:
             )
 
     def get_state(self):
-        return self.users[self.chat_id]['state']
+        try:
+            return self.users[self.chat_id]['state']
+        except:
+            return None
 
     def set_state(self, state, chat_id = None):
         if chat_id == None:
