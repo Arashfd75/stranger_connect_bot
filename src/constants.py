@@ -5,13 +5,15 @@ KEYS = SimpleNamespace(**dict(
     random_connect = ':satellite: Connect',
     settings = ':gear: Settings',
     back = ':cross_mark: Back',
-    disconnect = ':cross_mark: Disconnect'
+    disconnect = ':cross_mark: Disconnect',
+    start = ':green_circle: Start'
 ))
 
 keyboards = SimpleNamespace(**dict(
     main = create_keyboard([KEYS.random_connect, KEYS.settings]),
     back=create_keyboard([KEYS.back]),
-    talking=create_keyboard([KEYS.disconnect])
+    talking=create_keyboard([KEYS.disconnect]),
+    start = create_keyboard([KEYS.start])
 )
 )
 
